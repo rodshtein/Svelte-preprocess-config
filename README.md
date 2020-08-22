@@ -17,7 +17,7 @@
 - в **svelte.config.js** хранить основные настройки препроцессора,
 - в **postcss.config.js**, хранить настройки postcss _(если мы его используем)_. 
 
-[Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) нужно подсунуть файл основного конфига. Если у нас **postcss: true**, или ключ с плагинами postcss или в svelte-файлах есть атрибуты с **type/lang = postcss** и [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) не найдёт подтянутых postcss плагинов в первом файле то второй он найдёт сам и будет использовать плагины из этого файла, а плагины в первом — **проигнорирует**. 
+[Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) нужно подсунуть файл основного конфига. Если у нас **postcss: true**, или ключ с плагинами postcss или в svelte-файлах есть атрибуты с **type/lang = postcss** и [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) не найдёт подтянутых postcss плагинов в первом файле, то второй он найдёт сам и будет использовать плагины из этого файла, а плагины в первом — **проигнорирует**. 
 
 [Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) сам [подтягивает](https://github.com/michael-ciniawsky/postcss-load-config) все необходимые плагины из **postcss.config.js**. Это значит, что все зависимости должны быть установлены, если мы что-то забыли, то увидим предупреждение в консоли. 
 
