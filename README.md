@@ -44,7 +44,7 @@
 <img src="magic.gif">
 
 ## Решение
-[Sveltejs Language Tools](https://github.com/sveltejs/language-tools) для проверки синтаксиса использует файл **svelte.config.js**. В нём мы и будем хранить весь конфиг _(см. ниже)_ Единственное отличие в том, что если раньше мы хранили PostCSS конфиг в отдельном файле, в виде простого объекта, а [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) сам подтягивал зависимости, то тут нам придётся всё подтягивать вручную — никакой магии, зато наглядно. 
+[Sveltejs Language Tools](https://github.com/sveltejs/language-tools) для проверки синтаксиса использует файл **svelte.config.js**. В нём мы и будем хранить весь конфиг [_(см. ниже)_](#svelteconfigjs) Единственное отличие в том, что если раньше мы хранили PostCSS конфиг в отдельном файле, в виде простого объекта, а [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) сам подтягивал зависимости, то тут нам придётся всё подтягивать вручную — никакой магии, зато наглядно. 
 
 Наш конфиг экспортит объект с двумя функциями: 
 - первая нужна для работы линтера,
