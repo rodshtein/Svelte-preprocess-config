@@ -2,7 +2,7 @@
 
 # Svelte preprocess config — RIGHT WAY
 
-👉 [Русская версия](/README_RU.md)
+### 👉 [Русская версия](/README_RU.md)
 
 > English version is still in progress. PR welcome.
 
