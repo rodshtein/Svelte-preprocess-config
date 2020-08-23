@@ -1,8 +1,10 @@
+
+
 # Svelte preprocess config — RIGHT WAY
 
-## 👉 [Русская версия](/README_RU.md)
+👉 [Русская версия](/README_RU.md)
 
-> ### English version is still in progress. PR welcome.
+> English version is still in progress. PR welcome.
 
 ## The Problem
 Some times the code lint has fall or parsing has crashed. This is because the [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) guide tells you to store preprocessor-configs in different places:
