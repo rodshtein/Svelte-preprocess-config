@@ -1,64 +1,71 @@
 # Svelte preprocess config — RIGHT WAY
 
-## Проблема
-Часто бывает, что начинает глючить подсветка кода, или с подсветкой всё ок, но сборка падает. 
-Всё потому, что гайд [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) учит нас хранить конфиги препроцессора в разных местах: 
-- часть в **rollup.config.js**,
-- часть в **postcss.config.js**,
-- и конфиг для линтинга в **svelte.config.js**.
+## 👉 [Русская версия](/README_RU.md)
 
-Это может сильно запутать. Поэтому хорошая тактика хранить конфиг в одном месте, так, чтобы все инструменты имели к нему доступ. 
-С этой тактикой мы будем править конфиг один раз сводя вероятность ошибки к минимуму.
+> ### English version is still in progress. PR welcome.
 
-## А как вообще работает вся эта магия? 
-### Парсинг
+## The Problem
+Some times the code lint has fall or parsing has crashed. This is because the [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) guide tells you to store preprocessor-configs in different places:
+ 
+- part in **rollup.config.js**,
+- part in **postcss.config.js**,
+- and lint config in **svelte.config.js**.
 
-У [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) есть несколько тактик настройки, самая практичная сделать два файла: 
-- в **svelte.config.js** хранить основной конфиг препроцессора,
-- в **postcss.config.js** хранить postcss конфиг _(если мы его используем)_. 
+This can confuse. Therefore a good point to keep the whole config in one place for all tools. By using this pattern, you minimize the chance to error.
 
-В [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) нужно передать файл с основным конфигом. Если парсер найдет в нём:
-- ключ **postcss: true**, 
-- или ключ с конфигом postcss,
-- или атрибуты **type/lang = postcss** в svelte-файлах,
+## How does all this magic work?
+### Parsing
 
-и не найдёт **загруженных** postcss плагинов, то он будет искать **postcss.config.js** в корне проекта, использует его конфиг, а конфиг из первого файла — **проигнорирует**. 
+[Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) has several config patterns. The most practical is to make two files:
 
-[Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) сам [загружает](https://github.com/michael-ciniawsky/postcss-load-config) все необходимые плагины из **postcss.config.js**. Это значит, что все зависимости должны быть установлены, если мы что-то забыли, то увидим ошибку в консоли. 
+- store the main preprocessor config in **svelte.config.js**,
+- store the postcss config (if we use it) in  **postcss.config.js**. 
 
-[Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) определяет синтаксис глядя на атрибуты **type/lang** или использует дефолтные настройки, [которые можно поменять](https://github.com/sveltejs/svelte-preprocess/blob/master/docs/preprocessing.md#auto-preprocessing).
+You need to set the main config in [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess). Then parser will try to find:
+- key: `postcss: true`, 
+- or a key with a postcss config,
+- or attributes `type/lang = postcss` in svelte files,
 
-### Линтинг
+and if it found them but **didn't find loaded postcss plugins**, it will search for **postcss.config.js** in the root path, then it will use founded config, and **ignore** config from the first file.
+
+[Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) [requires](https://github.com/michael-ciniawsky/postcss-load-config) requires all plugins itself from postcss.config.js. This means you must install all dependencies, if you forgot something, you'll see an error in the console.
+
+[Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) defines syntax by type/lang attributes or use default config you can change it.
+
+### Linting
 
 Для работы линтера нужно расширение [Sveltejs Language Tools](https://github.com/sveltejs/language-tools). Расширение определяет синтаксис глядя на те же атрибуты **type/lang**. Если мы используем отличный от дефолтного (js, css, html) синтаксис, нам нужно использовать эти атрибуты, чтобы линтер понимал какие правила применять. 
 
-Определив синтаксис, линтер будет искать его конфиг в файле **svelte.config.js**. Если он встретит ключ **postcss** с объектом конфига, то использует его. Если встретит ключ/занчение **postcss: true**, то попытается найти файл **postcss.config.js** в корне проекта, и взять конфиг оттуда.
+For linting, you need the [Sveltejs Language Tools](https://github.com/sveltejs/language-tools) extension. The extension defines the syntax by same **type/lang** attributes. If you don't use default syntax (js, css, html), you need to add the attributes so that the linter understands which rules to apply.
+
+Then linter will look for config in the **svelte.config.js** file. If it has a **postcss key** with a config object, it uses it. If it has the key value postcss: true, it will try to find the **postcss.config.js** file in the root path, and take the config from there.
 
 
-### Что в итоге
+### Сonclusion
 
-Вдобавок, мы можем хранить часть конфига прямо в **rollup.config.js**, но нам всё равно нужны два других файла для линтинга. Как видите здесь много условностей из-за которых можно сильно запутаться и наш конфиг будет работать не так как хотелось. 
+In addition, you can add part of the config directly in **rollup.config.js**, but you still need two other files for linting. As you can see, there are a lot of pieces, it's confusing and you'll make many fails.
 
-Всё это грёбаная
+It's all f\***ng
 
 <img src="magic.gif">
 
-## Решение
-[Sveltejs Language Tools](https://github.com/sveltejs/language-tools) для проверки синтаксиса использует файл **svelte.config.js** — в нём мы будем хранить весь конфиг [_см. ниже_](#svelteconfigjs). Основное отличие в том, что раньше мы хранили postcss конфиг в отдельном файле, в виде простого объекта, а парсер с линтером сами загружали зависимости. Теперть нам придётся загружать зависимости самостоятельно — никакой магии, зато наглядно. 
+## Decision
 
-Наш конфиг экспортирует объект с двумя функциями: 
-- первая нужна для работы линтера,
-- вторую мы передадим в конфиг роллапа, где в зависимости от окружения (isDev) она вернёт нужную конфигурацию сборки.
+[Sveltejs Language Tools](https://github.com/sveltejs/language-tools) uses the **svelte.config.js** file to check the syntax - in which we will store the entire config, [_see below_](#svelteconfigjs). The main difference is that earlier we stored the postcss config in a separate file, and the parser with the linter make require for all dependencies by it is. Now we have to load the dependencies ourselves - no magic, but clearly.
 
-После правки конфига перезапустим линтер: 
+Our config exports an object with two functions: 
+- first is needed for the linter,
+- second - we will require in rollup config, where, depending on the environment (isDev), it will return the required build configuration.
+
+After editing the config, restart the linter: 
 - ctrl/cmd-shift-p, 
-- введите svelte restart, 
-- выберите Svelte: Restart Language Server.
+- enter svelte restart, 
+- select Svelte: Restart Language Server.
 
-Теперь, наш конфиг в одном месте, мы контролируем загрузку плагинов и уверены, что парсер с линтером используют единую конфигурацию.
+Now, our config is in one place, we decide which plugins to request and are sure that the parser and linter use the same configuration.
 
-> **Важное замечение**<br/>
-> Мы всё ещё можем добавить postcss конфиг отдельным файлом. Чтобы он заработал нужно в **svelte.config.js** прописать `postcss: true`, тогда все инструменты будут искать **postcss.config.js** в корне проекта. Если [синтаксис конфига](https://github.com/michael-ciniawsky/postcss-load-config#postcssrcjs-or-postcssconfigjs) правильный, то зависимости загрузятся автоматически. Ещё нужно отдельно прокинуть переменную окружения для настройки сборки. В итоге мы опять получим «магический» конфиг разбросанный по разным файлам.
+> **Important note**<br/>
+> We still can add the postcss config as a separate file. To make it work, you need to write `postcss: true` in **svelte.config.js**, then all tools will look for **postcss.config.js** in the root path. If the [config syntax](https://github.com/michael-ciniawsky/postcss-load-config#postcssrcjs-or-postcssconfigjs) is correct, then the dependencies will be loaded automatically. You also need to pass the environment variable to configure the build. As a result, we will again with "magic" config stored in different files.
 
 ### svelte.config.js
 ```
@@ -99,7 +106,7 @@ module.exports = {
 };
 ```
 ### rollup.config.js (sapper example)
-Так отмечены изменения 👈
+The changes are marked 👈
 ```
 // sapper def
 import resolve from '@rollup/plugin-node-resolve';
