@@ -4,16 +4,16 @@
 
 ### 👉 [Русская версия](/README_RU.md)
 
-> English version is still in progress. PR welcome.
+> English version is still in progress. Ready paragraph is marked by ✓ PR welcome.
 
-## The Problem
-Some times the code lint has fall or parsing has crashed. This is because the [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) guide tells you to store preprocessor-configs in different places:
+## The Problem ✓
+Sometimes codelint or parsing is falling when you trying to make it work. This is because by following preprocessor [guides](https://github.com/sveltejs/svelte-preprocess/tree/master/docs) you can split config to many files:
  
 - part in **rollup.config.js**,
 - part in **postcss.config.js**,
 - and lint config in **svelte.config.js**.
 
-This can confuse. Therefore a good point to keep the whole config in one place for all tools. By using this pattern, you minimize the chance to error.
+This can confuse. Therefore a good point to keep the whole config in one place for all tools. By using this pattern, you minimize the chance to make a mistake.
 
 ## How does all this magic work?
 ### Parsing
@@ -35,8 +35,6 @@ and if it found them but **didn't find loaded postcss plugins**, it will search 
 [Svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) defines syntax by type/lang attributes or use default config you can change it.
 
 ### Linting
-
-Для работы линтера нужно расширение [Sveltejs Language Tools](https://github.com/sveltejs/language-tools). Расширение определяет синтаксис глядя на те же атрибуты **type/lang**. Если мы используем отличный от дефолтного (js, css, html) синтаксис, нам нужно использовать эти атрибуты, чтобы линтер понимал какие правила применять. 
 
 For linting, you need the [Sveltejs Language Tools](https://github.com/sveltejs/language-tools) extension. The extension defines the syntax by same **type/lang** attributes. If you don't use default syntax (js, css, html), you need to add the attributes so that the linter understands which rules to apply.
 
