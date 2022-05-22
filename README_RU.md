@@ -1,6 +1,9 @@
+## ⚠️ Перемещено в [svelte-way](https://github.com/rodshtein/svelte-way/preprocess-config)
+<br>
+
 # Svelte preprocess config — RIGHT WAY
 
-### 👉 [English vers](/README.md)
+[`English vers`](/README.md)
 
 ## Проблема
 Часто бывает, что начинает глючить подсветка кода, или с подсветкой всё ок, но сборка падает. 
