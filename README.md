@@ -1,8 +1,9 @@
-
+## ⚠️ Permanently moved to [svelte-way](https://github.com/rodshtein/svelte-way/preprocess-config)
+<br>
 
 # Svelte preprocess config — RIGHT WAY
 
-### 👉 [Русская версия](/README_RU.md)
+[`Русская версия`](/README_RU.md)
 
 > English version is still in progress. Ready paragraph is marked by ✓ PR welcome.
 
